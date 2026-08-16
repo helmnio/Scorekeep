@@ -22,7 +22,7 @@ function uid() {
 }
 
 function defaultGame() {
-  return { status: 'setup', players: [], roundCount: 5, winMode: 'low', rounds: [] };
+  return { status: 'setup', players: [], roundCount: 13, winMode: 'low', rounds: [] };
 }
 
 function loadGame() {
@@ -206,7 +206,7 @@ function renderSetup() {
   playersList.innerHTML = '';
   const names = game.players.length ? game.players.map((p) => p.name) : ['', ''];
   names.forEach(addPlayerInput);
-  $('roundCount').value = game.roundCount || 5;
+  $('roundCount').value = game.roundCount || 13;
   $('winMode').value = game.winMode || 'low';
   renderSavedPeople();
 }
