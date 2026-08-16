@@ -1,16 +1,20 @@
 const STORAGE_KEY = 'scorekeep-game-v1';
+const PEOPLE_KEY = 'scorekeep-people-v1';
 
 const $ = (id) => document.getElementById(id);
 const setupView = $('setupView');
 const gameView = $('gameView');
 const winnerView = $('winnerView');
 const playersList = $('playersList');
+const savedPeopleEl = $('savedPeople');
+const savedPeopleGroup = $('savedPeopleGroup');
 const scoreInputs = $('scoreInputs');
 const standings = $('standings');
 const history = $('history');
 const historyCard = $('historyCard');
 
 let game = loadGame();
+let savedPeople = loadPeople();
 let editingRound = null;
 
 function uid() {
@@ -29,8 +33,27 @@ function loadGame() {
   }
 }
 
+function loadPeople() {
+  try {
+    const people = JSON.parse(localStorage.getItem(PEOPLE_KEY));
+    return Array.isArray(people) ? people : [];
+  } catch {
+    return [];
+  }
+}
+
 function saveGame() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(game));
+}
+
+function savePeople() {
+  localStorage.setItem(PEOPLE_KEY, JSON.stringify(savedPeople));
+}
+
+function currentPlayerNames() {
+  return [...document.querySelectorAll('.player-name')]
+    .map((input) => input.value.trim())
+    .filter(Boolean);
 }
 
 function addPlayerInput(name = '') {
@@ -40,9 +63,52 @@ function addPlayerInput(name = '') {
     <input class="player-name" type="text" maxlength="30" placeholder="Player name" value="${escapeHtml(name)}" />
     <button class="remove-player" type="button" aria-label="Remove player">×</button>`;
   row.querySelector('.remove-player').addEventListener('click', () => {
-    if (playersList.children.length > 2) row.remove();
+    if (playersList.children.length > 2) {
+      row.remove();
+    } else {
+      row.querySelector('.player-name').value = '';
+    }
+    renderSavedPeople();
   });
+  row.querySelector('.player-name').addEventListener('input', renderSavedPeople);
   playersList.appendChild(row);
+  renderSavedPeople();
+}
+
+function renderSavedPeople() {
+  savedPeopleGroup.classList.toggle('hidden', savedPeople.length === 0);
+  const activeNames = currentPlayerNames().map((name) => name.toLowerCase());
+
+  savedPeopleEl.innerHTML = savedPeople.map((name) => {
+    const isAdded = activeNames.includes(name.toLowerCase());
+    return `
+      <span class="saved-person${isAdded ? ' is-added' : ''}">
+        <button class="quick-add-person" type="button" data-name="${escapeHtml(name)}" ${isAdded ? 'disabled' : ''}>${escapeHtml(name)}</button>
+        <button class="delete-person" type="button" data-name="${escapeHtml(name)}" aria-label="Delete ${escapeHtml(name)}">×</button>
+      </span>`;
+  }).join('');
+
+  savedPeopleEl.querySelectorAll('.quick-add-person').forEach((button) => {
+    button.addEventListener('click', () => {
+      const name = button.dataset.name;
+      const emptyInput = [...document.querySelectorAll('.player-name')].find((input) => !input.value.trim());
+      if (emptyInput) {
+        emptyInput.value = name;
+        renderSavedPeople();
+      } else {
+        addPlayerInput(name);
+      }
+    });
+  });
+
+  savedPeopleEl.querySelectorAll('.delete-person').forEach((button) => {
+    button.addEventListener('click', () => {
+      const name = button.dataset.name;
+      savedPeople = savedPeople.filter((person) => person !== name);
+      savePeople();
+      renderSavedPeople();
+    });
+  });
 }
 
 function escapeHtml(value) {
@@ -142,6 +208,7 @@ function renderSetup() {
   names.forEach(addPlayerInput);
   $('roundCount').value = game.roundCount || 5;
   $('winMode').value = game.winMode || 'low';
+  renderSavedPeople();
 }
 
 function render() {
@@ -152,8 +219,23 @@ function render() {
 
 $('addPlayerBtn').addEventListener('click', () => addPlayerInput());
 
+$('savePeopleBtn').addEventListener('click', () => {
+  const names = currentPlayerNames();
+  if (!names.length) return;
+
+  names.forEach((name) => {
+    if (!savedPeople.some((person) => person.toLowerCase() === name.toLowerCase())) {
+      savedPeople.push(name);
+    }
+  });
+
+  savedPeople.sort((a, b) => a.localeCompare(b));
+  savePeople();
+  renderSavedPeople();
+});
+
 $('startGameBtn').addEventListener('click', () => {
-  const names = [...document.querySelectorAll('.player-name')].map((input) => input.value.trim()).filter(Boolean);
+  const names = currentPlayerNames();
   if (names.length < 2) return alert('Add at least two players.');
   const roundCount = Math.max(1, Math.min(50, Number($('roundCount').value) || 1));
   game = {
