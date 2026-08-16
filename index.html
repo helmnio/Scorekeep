@@ -36,10 +36,17 @@
 
       <div class="field-row">
         <label>
-          Rounds
-          <input id="roundCount" type="number" inputmode="numeric" min="1" max="50" value="5" />
+          Start round
+          <input id="roundStart" type="number" inputmode="numeric" min="0" max="99" value="3" />
         </label>
 
+        <label>
+          End round
+          <input id="roundEnd" type="number" inputmode="numeric" min="0" max="99" value="13" />
+        </label>
+      </div>
+
+      <div class="field-group">
         <label>
           Winner
           <select id="winMode">
@@ -56,10 +63,39 @@
       <div class="round-heading">
         <div>
           <p class="eyebrow">Current round</p>
-          <h2 id="roundTitle">Round 1</h2>
+          <h2 id="roundTitle">Round 3</h2>
         </div>
-        <button id="newGameBtn" class="text-button" type="button">New game</button>
+        <div class="header-actions">
+          <button id="gameSettingsBtn" class="text-button" type="button">Settings</button>
+          <button id="newGameBtn" class="text-button" type="button">New game</button>
+        </div>
       </div>
+
+      <section id="gameSettings" class="card compact-card hidden">
+        <div class="section-heading settings-heading">
+          <h2>Game settings</h2>
+          <button id="closeSettingsBtn" class="text-button" type="button">Close</button>
+        </div>
+        <div class="field-row">
+          <label>
+            Start round
+            <input id="gameRoundStart" type="number" inputmode="numeric" min="0" max="99" />
+          </label>
+          <label>
+            End round
+            <input id="gameRoundEnd" type="number" inputmode="numeric" min="0" max="99" />
+          </label>
+        </div>
+        <label class="settings-winner">
+          Winner
+          <select id="gameWinMode">
+            <option value="low">Lowest score</option>
+            <option value="high">Highest score</option>
+          </select>
+        </label>
+        <p id="settingsHelp" class="settings-help"></p>
+        <button id="saveGameSettingsBtn" class="button button-secondary" type="button">Save settings</button>
+      </section>
 
       <section class="card">
         <div id="scoreInputs" class="score-inputs"></div>
