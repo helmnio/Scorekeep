@@ -17,10 +17,21 @@
     <section id="setupView" class="card">
       <h2>New game</h2>
 
+      <div id="savedPeopleGroup" class="field-group hidden">
+        <div class="field-label-row">
+          <label>Saved people</label>
+          <span class="field-hint">Tap a name to add</span>
+        </div>
+        <div id="savedPeople" class="saved-people"></div>
+      </div>
+
       <div class="field-group">
         <label>Players</label>
         <div id="playersList" class="players-list"></div>
-        <button id="addPlayerBtn" class="button button-secondary" type="button">+ Add player</button>
+        <div class="player-actions">
+          <button id="addPlayerBtn" class="button button-secondary" type="button">+ Add player</button>
+          <button id="savePeopleBtn" class="button button-secondary" type="button">Save people</button>
+        </div>
       </div>
 
       <div class="field-row">
