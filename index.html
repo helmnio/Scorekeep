@@ -10,8 +10,18 @@
 <body>
   <main class="app-shell">
     <header class="app-header">
-      <p class="eyebrow">Family scorekeeper</p>
-      <h1>Scorekeep</h1>
+      <div>
+        <p class="eyebrow">Family scorekeeper</p>
+        <h1>Scorekeep</h1>
+      </div>
+      <label class="theme-control" aria-label="Colour theme">
+        <span>Theme</span>
+        <select id="themeSelect">
+          <option value="system">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
     </header>
 
     <section id="setupView" class="card">
@@ -39,7 +49,6 @@
           Start round
           <input id="roundStart" type="number" inputmode="numeric" min="0" max="99" value="3" />
         </label>
-
         <label>
           End round
           <input id="roundEnd" type="number" inputmode="numeric" min="0" max="99" value="13" />
