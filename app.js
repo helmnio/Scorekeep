@@ -91,12 +91,20 @@ function renderHistory() {
 }
 
 function renderScoreInputs(roundIndex) {
-  const existing = game.rounds[roundIndex]?.scores || {};
+  const isEditing = editingRound !== null;
+  const existing = isEditing ? (game.rounds[roundIndex]?.scores || {}) : {};
+
   scoreInputs.innerHTML = game.players.map((player) => `
     <label class="score-entry">
       <strong>${escapeHtml(player.name)}</strong>
-      <input type="number" inputmode="numeric" step="1" data-player="${player.id}" value="${existing[player.id] ?? ''}" placeholder="0" aria-label="${escapeHtml(player.name)} score" />
+      <input type="number" inputmode="numeric" step="1" autocomplete="off" data-player="${player.id}" value="${isEditing ? (existing[player.id] ?? '') : ''}" placeholder="0" aria-label="${escapeHtml(player.name)} score" />
     </label>`).join('');
+
+  if (!isEditing) {
+    scoreInputs.querySelectorAll('input[data-player]').forEach((input) => {
+      input.value = '';
+    });
+  }
 }
 
 function renderGame() {
