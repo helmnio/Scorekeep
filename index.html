@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#111827" />
+  <title>Scorekeep</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <p class="eyebrow">Family scorekeeper</p>
+      <h1>Scorekeep</h1>
+    </header>
+
+    <section id="setupView" class="card">
+      <h2>New game</h2>
+
+      <div class="field-group">
+        <label>Players</label>
+        <div id="playersList" class="players-list"></div>
+        <button id="addPlayerBtn" class="button button-secondary" type="button">+ Add player</button>
+      </div>
+
+      <div class="field-row">
+        <label>
+          Rounds
+          <input id="roundCount" type="number" inputmode="numeric" min="1" max="50" value="5" />
+        </label>
+
+        <label>
+          Winner
+          <select id="winMode">
+            <option value="low">Lowest score</option>
+            <option value="high">Highest score</option>
+          </select>
+        </label>
+      </div>
+
+      <button id="startGameBtn" class="button button-primary" type="button">Start game</button>
+    </section>
+
+    <section id="gameView" class="hidden">
+      <div class="round-heading">
+        <div>
+          <p class="eyebrow">Current round</p>
+          <h2 id="roundTitle">Round 1</h2>
+        </div>
+        <button id="newGameBtn" class="text-button" type="button">New game</button>
+      </div>
+
+      <section class="card">
+        <div id="scoreInputs" class="score-inputs"></div>
+        <button id="saveRoundBtn" class="button button-primary" type="button">Save round</button>
+      </section>
+
+      <section class="card standings-card">
+        <div class="section-heading">
+          <h2>Standings</h2>
+          <span id="modeLabel" class="pill"></span>
+        </div>
+        <div id="standings"></div>
+      </section>
+
+      <section id="historyCard" class="card hidden">
+        <h2>Rounds</h2>
+        <div id="history"></div>
+      </section>
+    </section>
+
+    <section id="winnerView" class="card winner-card hidden">
+      <p class="eyebrow">Game over</p>
+      <h2 id="winnerTitle"></h2>
+      <p id="winnerScore" class="winner-score"></p>
+      <div id="finalStandings"></div>
+      <div class="winner-actions">
+        <button id="playAgainBtn" class="button button-primary" type="button">Play again</button>
+        <button id="freshGameBtn" class="button button-secondary" type="button">New game</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
